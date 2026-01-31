@@ -47,15 +47,15 @@ before requests reach core application services.
 ## Project Structure
 
 app/
-├─ api/ # API endpoints
-├─ core/ # Configurations & Logger
-├─ middleware/ # Rate limiting logic
-└─ services/ # Redis client
+├─ api/           # API endpoints
+├─ core/          # Configurations & Logger
+├─ middleware/    # Rate limiting logic
+└─ services/      # Redis client
 
 aegis_middleware/ # Reusable middleware package
-examples/ # Demo FastAPI apps
-scripts/ # Attack simulation scripts
-locustfile.py # Load testing configuration
+examples/         # Demo FastAPI apps
+scripts/          # Attack simulation scripts
+locustfile.py     # Load testing configuration
 
 ---
 
