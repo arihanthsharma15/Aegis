@@ -46,6 +46,9 @@ before requests reach core application services.
 
 ## Project Structure
 
+## Project Structure
+
+```
 app/
 ├─ api/           # API endpoints
 ├─ core/          # Configurations & Logger
@@ -56,6 +59,7 @@ aegis_middleware/ # Reusable middleware package
 examples/         # Demo FastAPI apps
 scripts/          # Attack simulation scripts
 locustfile.py     # Load testing configuration
+```
 
 ---
 
