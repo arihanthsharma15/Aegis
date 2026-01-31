@@ -1,0 +1,11 @@
+Metadata-Version: 2.4
+Name: aegis-middleware
+Version: 0.1.0
+Summary: Redis-backed sliding window rate limiting middleware for FastAPI
+Author: Arihanth Sharma
+Requires-Python: >=3.9
+Requires-Dist: redis>=4.2.0
+Dynamic: author
+Dynamic: requires-dist
+Dynamic: requires-python
+Dynamic: summary
