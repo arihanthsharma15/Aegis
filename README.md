@@ -55,6 +55,11 @@ python3 scripts/attack_sim.py
 
 The script sends concurrent traffic to `/expensive-ai-call`, computes latency/success/block stats, and pushes the result to `/metrics/attack-simulation` for dashboard visualization.
 
+Production-friendly env options:
+- `AEGIS_BASE_URL` (default: `http://127.0.0.1:8000`)
+- `ATTACK_TOTAL_REQUESTS` (default: `20`)
+- `ATTACK_CONCURRENCY` (default: `3`)
+
 ## Deploy For Live Link
 1. Deploy FastAPI backend to Render/Railway/Fly.
 2. Attach managed Redis (Render Redis, Upstash, Railway Redis).
@@ -67,6 +72,19 @@ The script sends concurrent traffic to `/expensive-ai-call`, computes latency/su
    ```
    https://<your-domain>/dashboard
    ```
+
+## Automate Demo Traffic (Railway Cron)
+To keep dashboard data fresh for viewers without running locally:
+1. Create a second Railway service from same repo (e.g. `aegis-simulator`).
+2. Set Start Command:
+   ```bash
+   python3 scripts/attack_sim.py
+   ```
+3. Set variables:
+   - `AEGIS_BASE_URL=http://aegis.railway.internal`
+   - `ATTACK_TOTAL_REQUESTS=20`
+   - `ATTACK_CONCURRENCY=3`
+4. Add a Cron schedule (e.g. every 15 or 30 minutes).
 
 ## Project Structure
 ```text

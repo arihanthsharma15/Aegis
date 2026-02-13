@@ -1,14 +1,16 @@
 import asyncio
+import os
 import statistics
 import time
 from datetime import datetime, timezone
 
 import httpx
 
-TARGET_URL = "http://127.0.0.1:8000/expensive-ai-call"
-METRICS_URL = "http://127.0.0.1:8000/metrics/attack-simulation"
-TOTAL_REQUESTS = 80
-CONCURRENCY = 10
+BASE_URL = os.getenv("AEGIS_BASE_URL", "http://127.0.0.1:8000").rstrip("/")
+TARGET_URL = f"{BASE_URL}/expensive-ai-call"
+METRICS_URL = f"{BASE_URL}/metrics/attack-simulation"
+TOTAL_REQUESTS = int(os.getenv("ATTACK_TOTAL_REQUESTS", "20"))
+CONCURRENCY = int(os.getenv("ATTACK_CONCURRENCY", "3"))
 
 
 async def send_request(
