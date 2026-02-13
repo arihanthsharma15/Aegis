@@ -19,3 +19,6 @@ async def get_redis() -> Redis:
         )
 
     return redis_client
+
+
+# What is redis? : It is an in-memory data structure store (data gets stored in RAM) instead of disk. It is used for caching, rate limiting. It is very fast and is used when we need to access data quickly. 

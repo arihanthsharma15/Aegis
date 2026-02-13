@@ -1,67 +1,84 @@
-# Aegis API – Security & Analytics Middleware
+# Aegis API - Security & Analytics Middleware
 
 ## Overview
-**Aegis API** is a proactive API Security and Analytics Middleware built with **FastAPI** and **Redis**.  
-It is designed to protect high-resource and AI-driven applications from abuse, unauthorized access, and sudden traffic spikes while maintaining minimal latency overhead.  
-The system acts as a **protective layer before requests reach the core business logic.**
+**Aegis API** is a proactive API Security and Analytics Middleware built with **FastAPI** and **Redis**.
+It protects high-resource and AI-driven applications from abuse, unauthorized access, and sudden traffic spikes while keeping low latency.
 
----
+Aegis now ships with a **live visibility dashboard** and **Redis-backed persistent metrics history** for production deployments.
 
 ## Key Features
-- **Intelligent Rate Limiting** – Sliding Window algorithm using Redis for high-speed request tracking and DDoS prevention
-- **Security Analytics** – Real-time monitoring of IP traffic patterns, latency, and server health
-- **Plug-and-Play Middleware** – Easily integrable with FastAPI applications
-- **High Performance** – Optimized for low-latency validation and scalable workloads
-- **Attack Simulation & Load Testing** – Includes scripts and Locust configuration for stress testing
-
----
-
-## Custom Middleware Library
-Aegis is also structured as a **reusable Python middleware library** (`aegis_middleware`) built from scratch and validated through a demo FastAPI application.
-
-- Implements **Redis-powered Sliding Window Rate Limiting**
-- Fully modular plug-and-play architecture
-- Not yet published on PyPI, but production-ready and reusable across FastAPI projects
-
----
+- **Sliding Window Rate Limiting** via Redis sorted sets
+- **Real-time Security Dashboard** for request analytics and abuse visibility
+- **Persistent Historical Metrics** (minute buckets in Redis with retention)
+- **Attack Simulation Tracking** with persisted run summaries
+- **Redis and FastAPI Runtime Metrics** exposed through API
+- **Stack Suggestion Engine** based on observed traffic risk signals
 
 ## Tech Stack
-- **Backend:** Python, FastAPI  
-- **Caching & Rate Limiting:** Redis  
-- **Containerization:** Docker, Docker Compose  
-- **Load Testing:** Locust  
-- **Environment:** Linux  
+- **Backend:** Python, FastAPI
+- **Cache & Limiting:** Redis
+- **Visualization:** Chart.js dashboard served by FastAPI
+- **Containerization:** Docker, Docker Compose
+- **Load Testing:** Locust + async attack simulator
 
----
+## Dashboard Visibility
+Open `http://127.0.0.1:8000/dashboard` to view:
+- Requests per minute (latest active + current)
+- Blocked requests
+- Rate-limit hits
+- Attack simulation results
+- FastAPI backend uptime
+- Redis stats (memory, ops/sec, clients, hit/miss)
+- Live stack hardening suggestions
+- Historical ranges: `30m / 6h / 24h / 7d`
 
-## Use Case
-Ideal for **AI platforms, SaaS products, and production APIs** that require:
-- Traffic control  
-- Abuse prevention  
-- Real-time security insights  
+## API Endpoints
+- `GET /health`
+- `POST /expensive-ai-call`
+- `GET /dashboard`
+- `GET /metrics/dashboard?history_minutes=30`
+- `POST /metrics/attack-simulation`
 
-before requests reach core application services.
+## Environment Variables
+- `REDIS_URL` (default: `redis://localhost:6379`)
+- `RATE_LIMIT` (default: `60`)
+- `WINDOW_SIZE` (default: `60`)
+- `METRICS_RETENTION_MINUTES` (default: `10080` = 7 days)
+- `ATTACK_RESULTS_LIMIT` (default: `100`)
+- `CORS_ORIGINS` (default: `*`, comma-separated origins in production)
 
----
-
-## Project Structure
-
-## Project Structure
-
+## Attack Simulation
+Run:
+```bash
+python3 scripts/attack_sim.py
 ```
+
+The script sends concurrent traffic to `/expensive-ai-call`, computes latency/success/block stats, and pushes the result to `/metrics/attack-simulation` for dashboard visualization.
+
+## Deploy For Live Link
+1. Deploy FastAPI backend to Render/Railway/Fly.
+2. Attach managed Redis (Render Redis, Upstash, Railway Redis).
+3. Set required environment variables.
+4. Start command:
+   ```bash
+   uvicorn app.main:app --host 0.0.0.0 --port $PORT
+   ```
+5. Open live dashboard at:
+   ```
+   https://<your-domain>/dashboard
+   ```
+
+## Project Structure
+```text
 app/
-├─ api/           # API endpoints
-├─ core/          # Configurations & Logger
-├─ middleware/    # Rate limiting logic
-└─ services/      # Redis client
+|- api/           # API endpoints
+|- core/          # Config and logger
+|- middleware/    # Rate limiting logic
+|- services/      # Redis and metrics services
+|- static/        # Dashboard frontend (Chart.js)
 
 aegis_middleware/ # Reusable middleware package
 examples/         # Demo FastAPI apps
 scripts/          # Attack simulation scripts
 locustfile.py     # Load testing configuration
 ```
-
----
-
-## Impact
-Enhances **API reliability, scalability, and security** by filtering malicious or excessive traffic at the middleware layer, reducing server load, and safeguarding high-resource AI applications from misuse and unexpected spikes.
